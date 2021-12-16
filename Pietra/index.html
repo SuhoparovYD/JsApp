@@ -1,0 +1,210 @@
+<!doctype html>
+  <head>
+   <title>Tile</title>
+   <script src="js\angular.min.js"></script> 
+   <script src="js\angular-animate.min.js"></script>
+   <script src="js\bootstrap.min.js"></script>
+   <script src="js\graph.js"></script>
+
+   <link href="css\bootstrap.min.css" rel="stylesheet">
+   <link href="css\animate.css" rel="stylesheet" type="text/css">
+   <link href="css\graph.less" rel="stylesheet" >
+  
+  </head>
+  <body ng-app="graphApp">
+ 
+  <div class="lbx" ng-controller="graphController as graph">
+  
+   <h4> Раскрой плиты  </h4>
+   <h4></h4>
+ 
+ <div class="chart" style="width:{{width}}px; height:{{height}}px;">  
+ 
+      <!-- Data -->
+      <svg id="svg1" class="col-md-offset-2" style="width:{{width}}px; height:{{height}}px;">
+ 	<!-- Left -->
+        <line id="L3"  ng-repeat="line in data" ng-if="$index != data.length-1"
+		x1="{{data[$index].xl }}"	y1="{{($index ) * step}}"
+                x2="{{data[$index+1].xl}}"	y2="{{($index +1) * step}}">
+        </line>
+	<!-- Right -->
+       <line id="L3" ng-repeat="line in data" ng-if="$index != data.length-1"
+		x1="{{data[$index].xr}}"	y1="{{($index ) * step}}"
+                x2="{{data[$index+1].xr}}"	y2="{{($index +1) * step}}">
+       </line>
+	<!-- Top -->
+       <line id="L3" x1="{{data[0].xl }}"	y1="{{(0) * step+1}}"
+              		x2="{{data[0].xr}}"	y2="{{(0) * step+1}}">
+       </line>
+	<!-- Bottom  -->
+       <line id="L3"  x1="{{data[data.length-1].xl }}"	y1="{{(data.length-1) * step}}"
+              	x2="{{data[data.length-1].xr}}"		y2="{{(data.length-1) * step}}">
+       </line>
+
+	<!-- RazmBtm -->
+       <line id="L1" x1="{{data[data.length-1].xr }}"	y1="{{(data.length-1) * step}}"
+              		x2="{{xrazm}}"			y2="{{(data.length-1) * step}}">
+       </line>
+	<!-- RazmTop -->
+       <line id="L1" x1="{{data[0].xr }}"		y1="{{0}}"
+              		x2="{{xrazm}}"			y2="{{0}}">
+       </line>
+	<!-- Razm Y-->
+       <line id="L1" x1="{{xrazm-5}}"		y1="{{0}}"
+              	     x2="{{xrazm-5}}"		y2="{{(data.length-1) * step}}">
+       </line>
+
+<!-- Arrow Y -->
+       <line id="L1" x1="{{xrazm-2}}"		y1="{{(2) * step}}"
+              	     x2="{{xrazm-5}}"		y2="{{0}}">           </line>
+       <line id="L1" x1="{{xrazm-8}}"		y1="{{(2) * step}}"
+             	     x2="{{xrazm-5}}"		y2="{{0}}">           </line>
+       <line id="L1" x1="{{xrazm-2}}"		y1="{{(data.length-3) * step}}"
+           	     x2="{{xrazm-5}}"		y2="{{(data.length-1) * step}}">       </line>
+       <line id="L1" x1="{{xrazm-8}}"		y1="{{(data.length-3) * step}}"
+              	     x2="{{xrazm-5}}"		y2="{{(data.length-1) * step}}">       </line>
+
+       <text x={{xrazm-14}} y="{{(data.length-1) * step/2}}" style="writing-mode: tb" fill="#ED6E46" font-size="10">{{(data.length-1) * step*10}}</text>
+
+<!-- Razm X L -->
+       <line id="L1" x1={{xrLeft}}    y1="{{yrLeft * step}}"
+                     x2={{xrLeft}}    y2={{yrazm}}>		 </line>
+<!-- Razm X R -->
+       <line id="L1" x1={{xrRight}}    y1="{{yrRight * step}}"
+                     x2={{xrRight}}    y2={{yrazm}}>		 </line>
+<!-- Razm X-->
+       <line id="L1" x1={{xrLeft}}     y1={{yrazm-5}}
+                     x2={{xrRight}}    y2={{yrazm-5}}>		 </line>
+
+<!-- Arrow X -->
+       <line id="L1" x1={{xrLeft}}		y1="{{yrazm-5}}"
+              	     x2="{{xrLeft+10}}"		y2="{{yrazm-8}}">	</line>
+       <line id="L1" x1={{xrLeft}}		y1="{{yrazm-5}}"
+              	     x2="{{xrLeft+10}}"		y2="{{yrazm-2}}">	</line>
+       <line id="L1" x1={{xrRight}}		y1="{{yrazm-5}}"
+              	     x2="{{xrRight-10}}"	y2="{{yrazm-8}}">	</line>
+       <line id="L1" x1={{xrRight}}		y1="{{yrazm-5}}"
+              	     x2="{{xrRight-10}}"	y2="{{yrazm-2}}">	</line>
+
+       <text x={{(xrRight+xrLeft)/2-10}} y={{yrazm-10}} fill="#ED6E46" font-size="10">{{(xrRight-xrLeft)*10}}</text>
+
+<!-- RazmRect X L -->
+       <line id="L1" x1={{xRect}}    y1="{{yRect + heightRect}}"
+                     x2={{xRect}}    y2={{yrazm-30}}>                   </line>
+<!-- RazmRect X R -->
+       <line id="L1" x1="{{xRect + widthRect}}"	y1="{{yRect + heightRect}}"
+                     x2="{{xRect + widthRect}}"	y2={{yrazm-30}}>      </line>
+<!-- RazmRect X-->
+       <line id="L1" x1={{xRect}}		y1={{yrazm-35}}
+                     x2="{{xRect + widthRect}}"	y2={{yrazm-35}}>      </line>
+
+       <line id="L1" x1="{{xRect - 2}}"	  	y1="{{yrazm - 33}}"
+                     x2="{{xRect + 2}}"		y2="{{yrazm - 37}}">      </line>
+
+       <line id="L1" x1="{{xRect + widthRect - 2}}"	  	y1="{{yrazm - 33}}"
+                     x2="{{xRect + widthRect + 2}}"		y2="{{yrazm - 37}}">      </line>
+
+       <text x={{(xrRight+xrLeft)/2-10}} y={{yrazm-40}} fill="#ED6E46" font-size="10">{{widthRect*10}}</text>
+
+<!-- RazmRect Y Top -->
+       <line id="L1" x1="{{xRect + widthRect}}"    y1="{{yRect}}"
+                     x2="{{xrazm-30}}"		   y2="{{yRect}}">		</line>
+<!-- RazmRect Y Bott -->
+       <line id="L1" x1="{{xRect + widthRect}}"   y1="{{yRect + heightRect}}"
+                     x2="{{xrazm-30}}"   	  y2="{{yRect + heightRect}}">	</line>
+<!-- RazmRect Y-->
+       <line id="L1" x1="{{xrazm-30-4}}"   y1="{{yRect}}"
+                     x2="{{xrazm-30-4}}"   y2="{{yRect + heightRect}}">	        </line>
+
+       <line id="L1" x1="{{xrazm-30-2}}"   y1="{{yRect - 2}}"
+                     x2="{{xrazm-30-6}}"   y2="{{yRect + 2}}">			</line>
+
+       <line id="L1" x1="{{xrazm-30-2}}"   y1="{{yRect + heightRect - 2}}"
+                     x2="{{xrazm-30-6}}"   y2="{{yRect + heightRect + 2}}">	</line>
+    
+       <text x={{xrazm-30-14}} y="{{(data.length-1) * step/2}}" style="writing-mode: tb" fill="#ED6E46" font-size="10">{{heightRect*10}}</text>
+
+
+<!--  <rect x="50" y="10" width="180" height="250" fill="#11149A" />   /-->
+       <rect x={{xRect}} y={{yRect}} width={{widthRect}} height={{heightRect}} fill="#ff8171" />    
+
+
+<!-- tile Y line  /--> 
+       <line id="L2"  ng-repeat="m in ratio" ng-if="m*selectedTile.yLen/10 <= heightRect" 
+		x1="{{xRect}}" 		  y1="{{yRect+m*selectedTile.yLen/10}}"
+                x2="{{xRect+widthRect}}"  y2="{{yRect+m*selectedTile.yLen/10}}">	</line>
+
+<!-- tile X line  /--> 
+       <line id="L2"  ng-repeat="m in ratio" ng-if="m*selectedTile.xLen/10 <= widthRect" 
+		x1="{{xRect+m*selectedTile.xLen/10}}"  y1="{{yRect}}"
+                x2="{{xRect+m*selectedTile.xLen/10}}"  y2="{{yRect+heightRect}}">	</line>
+
+    </svg>
+ <style>
+table,th {
+  border: 1px solid black;
+}
+</style> 
+
+<style>
+div #d2  {
+  border: 1px solid whitesmoke;
+  background: ivory;
+width:270px; height:250px;
+}
+</style> 
+
+<div id="d2" class="col-md-offset-1">
+Выбор плитки: {{selectedTile.xLen}} 
+    <select ng-model="selectedTile" ng-options=" y.xLen + ' * ' + y.yLen for (x, y) in tiles">  </select> 
+<p> </p>
+	<table class="col-md-offset-1">
+        <tr>
+          <th> Длина. </th>
+          <th> Ширина.</th>
+		  <th> Количество.</th>
+        </tr>
+        <tr ng-repeat="tile in tiles">
+<td ng-if="$odd" style="background-color:#f1f1f1">{{tile.xLen}}</td>
+<td ng-if="$even">{{tile.xLen }}</td>
+<td ng-if="$odd" style="background-color:#f1f1f1">{{tile.yLen}}</td>
+<td ng-if="$even">{{tile.yLen }}</td>
+<td ng-if="$odd" style="background-color:#f1f1f1">{{tile.quantity}}</td>
+<td ng-if="$even">{{tile.quantity }}</td>
+        </tr>
+      </table>
+<p> </p>
+ <label> Параметры плиты: <input type="checkbox"  ng-model="checked" ng-init="checked=true" /></label> 
+</div>
+
+
+ <div class="lbx" ng-if="checked" class="animate-if">
+
+<style>
+div #d1  {
+  border: 1px solid whitesmoke;
+  background: ivory;
+width:270px; height:160px;
+}
+</style> 
+ 
+<div id="d1" class="col-md-offset-1">
+<p> </p>
+ Габариты (мм):<br>
+ Левый - {{xrLeft*10}}, правый, - {{xrRight*10}}
+<br>
+ верхний  - 0 ,  нижний - {{(data.length-1) * step*10}} </p>
+Количество строк массива  - {{data.length}}
+<p>  </p>
+Вписанный прямоугольник  (мм):
+<br>
+Левый верхний угол: x = {{xRect*10}}, y = {{yRect*10}} <br> 
+Ширина:  {{widthRect*10}},  Длина :  {{heightRect*10}}, мм 
+</div>
+    </div>
+  </div>
+</div>
+
+
+  </body>
+</html>
